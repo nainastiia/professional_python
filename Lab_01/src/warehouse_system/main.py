@@ -1,5 +1,5 @@
-from src.warehouse_system.models import WarehouseItem
-from src.warehouse_system.services import (
+from Lab_01.src.warehouse_system.models import WarehouseItem
+from Lab_01.src.warehouse_system.services import (
     add_stock,
     calculate_total_warehouse_value,
     find_item_by_code,

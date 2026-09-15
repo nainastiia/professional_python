@@ -1,4 +1,4 @@
-from src.warehouse_system.models import WarehouseItem
+from Lab_01.src.warehouse_system.models import WarehouseItem
 
 
 class InsufficientStockError(Exception):
