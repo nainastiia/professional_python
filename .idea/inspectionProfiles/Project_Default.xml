@@ -1,0 +1,25 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="pytest" />
+          <option value="mypy" />
+          <option value="black" />
+          <option value="ruff" />
+          <option value="pytest-benchmark" />
+          <option value="fastapi" />
+          <option value="uvicorn" />
+          <option value="jinja2" />
+          <option value="python-multipart" />
+          <option value="requests" />
+          <option value="pydantic" />
+          <option value="motor" />
+          <option value="aiohttp" />
+          <option value="apscheduler" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
