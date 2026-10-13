@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+build-setuptools = "setuptools.build_meta"
 
 [project]
 name = "warehouse"
@@ -25,7 +25,7 @@ markers = [
 branch = true
 source = ["warehouse"]
 
-[tool.setuptools.packages.find]
+[tool.coverage.report]
 show_missing = true
 skip_covered = false
 fail_under = 80
