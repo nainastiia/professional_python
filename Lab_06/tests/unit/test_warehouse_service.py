@@ -60,6 +60,25 @@ def test_configuration_default(monkeypatch):
     assert get_low_stock_threshold() == 10
 
 
+def test_process_incoming_product_not_found():
+    repo = Mock()
+    repo.get_by_code.return_value = None  # Товар не знайдено
+    supplier = Mock()
+    service = WarehouseService(repo, supplier)
+
+    with pytest.raises(ValueError, match="not found"):
+        service.process_incoming("UNKNOWN-001", 10)
+
+
+def test_process_issuing_product_not_found():
+    repo = Mock()
+    repo.get_by_code.return_value = None  # Товар не знайдено
+    supplier = Mock()
+    service = WarehouseService(repo, supplier)
+
+    with pytest.raises(ValueError, match="not found"):
+        service.process_issuing("UNKNOWN-001", 5)
+        
 @pytest.mark.asyncio
 async def test_async_reorder_provider():
     provider = AsyncMock()
