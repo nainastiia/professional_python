@@ -22,11 +22,18 @@ class CSVImporter:
             for row in reader:
                 if not all(k in row for k in ("code", "name", "quantity", "unit_price")):
                     raise ValueError("Malformed CSV record: missing columns")
+                # перевірка на валідність числових полів (malformed quantity record)
+                try:
+                    qty = int(row["quantity"])
+                    price = float(row["unit_price"])
+                except ValueError as err:
+                    raise ValueError("Malformed numeric record in CSV") from err
+
                 item = WarehouseItem(
                     code=row["code"],
                     name=row["name"],
-                    quantity=int(row["quantity"]),
-                    unit_price=float(row["unit_price"]),
+                    quantity=qty,
+                    unit_price=price,
                 )
                 items.append(item)
         return items

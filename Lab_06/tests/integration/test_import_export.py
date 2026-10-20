@@ -32,3 +32,12 @@ def test_import_malformed_csv_raises(tmp_path):
 
     with pytest.raises(ValueError, match="Malformed CSV record"):
         CSVImporter.import_from_file(bad_csv)
+
+
+@pytest.mark.integration
+def test_import_malformed_numeric_raises(tmp_path):
+    bad_csv = tmp_path / "bad_num.csv"
+    bad_csv.write_text("code,name,quantity,unit_price\nP-1,Test,abc,10.0\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="Malformed numeric record"):
+        CSVImporter.import_from_file(bad_csv)

@@ -17,12 +17,10 @@ def test_find_by_code(sample_item_list):
 
 def test_calculate_total_inventory_value(sample_item_list):
     total = calculate_total_inventory_value(sample_item_list)
-    # 5*25000 + 2*500 + 10*1200 = 125000 + 1000 + 12000 = 138000
     assert total == pytest.approx(138000.0)
 
 
 def test_get_low_stock_items(sample_item_list):
-    # threshold = 6 -> Laptop (5) and Mouse (2) are low stock
     low = get_low_stock_items(sample_item_list, threshold=6)
     assert len(low) == 2
     assert low[0].code == "P-001"
@@ -56,3 +54,13 @@ async def test_async_reorder_service():
 
     assert result == "success"
     mock_client.place_order.assert_awaited_once_with("P-001", 7)
+
+
+@pytest.mark.asyncio
+async def test_async_reorder_service_sufficient():
+    mock_client = AsyncMock()
+    service = AsyncReorderService(async_client=mock_client)
+    result = await service.check_and_reorder_async("P-001", 5, 10)
+
+    assert result == "sufficient"
+    mock_client.place_order.assert_not_awaited()

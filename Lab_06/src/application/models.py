@@ -32,10 +32,38 @@ class Warehouse:
                 code=existing.code,
                 name=existing.name,
                 quantity=existing.quantity + item.quantity,
-                unit_price=item.unit_price
+                unit_price=existing.unit_price
             )
         else:
             self.items[item.code] = item
+
+    def receive_stock(self, code: str, qty: int) -> None:
+        if qty <= 0:
+            raise ValueError("Received quantity must be positive")
+        if code not in self.items:
+            raise KeyError(f"Item with code {code} not found")
+        item = self.items[code]
+        self.items[code] = WarehouseItem(
+            code=item.code,
+            name=item.name,
+            quantity=item.quantity + qty,
+            unit_price=item.unit_price
+        )
+
+    def ship_stock(self, code: str, qty: int) -> None:
+        if qty <= 0:
+            raise ValueError("Shipped quantity must be positive")
+        if code not in self.items:
+            raise KeyError(f"Item with code {code} not found")
+        item = self.items[code]
+        if item.quantity < qty:
+            raise ValueError("Insufficient stock for shipping")
+        self.items[code] = WarehouseItem(
+            code=item.code,
+            name=item.name,
+            quantity=item.quantity - qty,
+            unit_price=item.unit_price
+        )
 
     def __len__(self) -> int:
         return len(self.items)

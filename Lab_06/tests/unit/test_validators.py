@@ -14,3 +14,7 @@ def test_invalid_price_raises_error(invalid_price):
 def test_invalid_empty_code_raises_error():
     with pytest.raises(ValueError, match="code cannot be empty"):
         WarehouseItem(code="   ", name="Test", quantity=5, unit_price=10.0)
+
+def test_invalid_empty_name_raises_error():
+    with pytest.raises(ValueError, match="name cannot be empty"):
+        WarehouseItem(code="T-1", name="   ", quantity=5, unit_price=10.0)

@@ -1,7 +1,7 @@
 [project]
 name = "warehouse-system"
 version = "0.1.0"
-description = "Система обліку складських запасів"
+description = "Система обліку складських запасів (Варіант 10)"
 requires-python = ">=3.10"
 dependencies = []
 
