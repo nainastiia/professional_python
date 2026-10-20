@@ -3,9 +3,9 @@
 
 from typing import Protocol
 
-from src.warehouse.config import get_low_stock_threshold
-from src.warehouse.models import Product, WarehouseItem
-from src.warehouse.repositories import WarehouseRepository
+from warehouse.config import get_low_stock_threshold
+from warehouse.models import Product, WarehouseItem
+from warehouse.repositories import WarehouseRepository
 
 
 class ReorderProvider(Protocol):

@@ -5,7 +5,7 @@ import math
 
 import pytest
 
-from src.warehouse.models import (
+from warehouse.models import (
     InsufficientStockError,
     Product,
     WarehouseItem,

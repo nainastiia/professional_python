@@ -7,10 +7,10 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
-from src.warehouse.exporters import export_json, stream_csv_import
-from src.warehouse.models import Product
-from src.warehouse.repositories import InMemoryWarehouseRepository
-from src.warehouse.services import WarehouseService
+from warehouse.exporters import export_json, stream_csv_import
+from warehouse.models import Product
+from warehouse.repositories import InMemoryWarehouseRepository
+from warehouse.services import WarehouseService
 
 
 @pytest.mark.integration

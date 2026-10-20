@@ -3,9 +3,9 @@
 
 import pytest
 
-from src.warehouse.models import Product, WarehouseItem
-from src.warehouse.repositories import InMemoryWarehouseRepository
-from src.warehouse.services import WarehouseService
+from warehouse.models import Product, WarehouseItem
+from warehouse.repositories import InMemoryWarehouseRepository
+from warehouse.services import WarehouseService
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@
 
 import pytest
 
-from src.warehouse.config import (
+from warehouse.config import (
     DEFAULT_LOW_STOCK_THRESHOLD,
     get_low_stock_threshold,
 )

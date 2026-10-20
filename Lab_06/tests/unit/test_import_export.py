@@ -6,12 +6,12 @@ import json
 
 import pytest
 
-from src.warehouse.exporters import (
+from warehouse.exporters import (
     WarehouseValidationError,
     export_json,
     stream_csv_import,
 )
-from src.warehouse.models import Product, WarehouseItem
+from warehouse.models import Product, WarehouseItem
 
 
 def test_csv_import_from_file_object():

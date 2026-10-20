@@ -5,13 +5,13 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
-from src.warehouse.models import (
+from warehouse.models import (
     InsufficientStockError,
     Product,
     WarehouseItem,
 )
-from src.warehouse.repositories import InMemoryWarehouseRepository
-from src.warehouse.services import WarehouseService
+from warehouse.repositories import InMemoryWarehouseRepository
+from warehouse.services import WarehouseService
 
 
 def test_repository_add_and_get(product):

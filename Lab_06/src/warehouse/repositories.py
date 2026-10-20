@@ -3,7 +3,7 @@
 
 from typing import Protocol
 
-from src.warehouse.models import Product, WarehouseItem
+from warehouse.models import Product, WarehouseItem
 
 
 class WarehouseRepository(Protocol):

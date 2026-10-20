@@ -7,7 +7,7 @@ from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import TextIO
 
-from src.warehouse.models import Product, WarehouseItem
+from warehouse.models import Product, WarehouseItem
 
 
 class WarehouseValidationError(ValueError):
