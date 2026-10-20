@@ -118,6 +118,10 @@ def test_repository_mock_side_effect():
     assert service.find_product("B") is None
     assert repository.get.call_count == 2
 
+def test_repository_rejects_invalid_item_type(product):
+    repository = InMemoryWarehouseRepository()
+    with pytest.raises(TypeError, match="WarehouseItem instance"):
+        repository.add("not-a-warehouse-item")  # передаємо рядок замість об'єкта
 
 def test_service_interacts_with_repository():
     repository = Mock()
