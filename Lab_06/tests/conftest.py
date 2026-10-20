@@ -1,20 +1,27 @@
 import pytest
-from application.models import WarehouseItem, Warehouse
+from warehouse.models import WarehouseItem
+from warehouse.services import Warehouse
 
 @pytest.fixture
-def sample_item() -> WarehouseItem:
-    return WarehouseItem(code="P-001", name="Laptop", quantity=5, unit_price=25000.0)
+def item():
+    return WarehouseItem('A1', 'Keyboard', 10, 125.5)
 
 @pytest.fixture
-def sample_item_list() -> list[WarehouseItem]:
-    return [
-        WarehouseItem(code="P-001", name="Laptop", quantity=5, unit_price=25000.0),
-        WarehouseItem(code="P-002", name="Mouse", quantity=2, unit_price=500.0),
-        WarehouseItem(code="P-003", name="Keyboard", quantity=10, unit_price=1200.0),
-    ]
+def warehouse(item):
+    result = Warehouse()
+    result.add(item)
+    return result
 
 @pytest.fixture
-def sample_warehouse(sample_item) -> Warehouse:
-    wh = Warehouse()
-    wh.add(sample_item)
-    return wh
+def item_factory():
+    def create(code='X', quantity=5, price=10):
+        return WarehouseItem(code, 'Sample', quantity, price)
+    return create
+
+@pytest.fixture
+def csv_factory(tmp_path):
+    def create(content):
+        path = tmp_path / 'items.csv'
+        path.write_text(content, encoding='utf-8')
+        return path
+    yield create

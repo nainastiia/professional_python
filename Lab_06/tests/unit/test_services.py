@@ -1,66 +1,70 @@
-import pytest
 from unittest.mock import Mock, AsyncMock
-from application.services import (
-    find_by_code,
-    calculate_total_inventory_value,
-    get_low_stock_items,
-    AsyncReorderService,
-)
+import asyncio
+import pytest
+from warehouse.services import Warehouse
+from warehouse.models import InsufficientStockError
 
+def test_empty_warehouse():
+    assert Warehouse().total_value() == 0
 
-def test_find_by_code(sample_item_list):
-    found = find_by_code(sample_item_list, "P-002")
-    assert found is not None
-    assert found.name == "Mouse"
-    assert find_by_code(sample_item_list, "UNKNOWN") is None
+def test_find(warehouse, item):
+    assert warehouse.find('A1') is item
 
+def test_find_missing(warehouse):
+    assert warehouse.find('missing') is None
 
-def test_calculate_total_inventory_value(sample_item_list):
-    total = calculate_total_inventory_value(sample_item_list)
-    assert total == pytest.approx(138000.0)
+def test_receive(warehouse):
+    assert warehouse.receive('A1', 3) == 13
 
+def test_issue(warehouse):
+    assert warehouse.issue('A1', 10) == 0
 
-def test_get_low_stock_items(sample_item_list):
-    low = get_low_stock_items(sample_item_list, threshold=6)
-    assert len(low) == 2
-    assert low[0].code == "P-001"
-    assert low[1].code == "P-002"
+def test_insufficient_stock(warehouse):
+    with pytest.raises(InsufficientStockError, match='insufficient'):
+        warehouse.issue('A1', 11)
+    assert warehouse.find('A1').quantity == 10
 
+@pytest.mark.parametrize('amount', [0, -1, 2.5, True])
+def test_invalid_amount(warehouse, amount):
+    with pytest.raises(ValueError):
+        warehouse.receive('A1', amount)
 
-def test_mock_supplier_notification():
-    mock_supplier = Mock()
-    mock_supplier.reorder.return_value = "ORD-999"
+def test_missing_code(warehouse):
+    with pytest.raises(KeyError):
+        warehouse.issue('absent', 1)
 
-    result = mock_supplier.reorder("P-001", 10)
-    assert result == "ORD-999"
-    mock_supplier.reorder.assert_called_once_with("P-001", 10)
+def test_low_stock(warehouse):
+    assert warehouse.low_stock(9) == []
+    assert [x.code for x in warehouse.low_stock(10)] == ['A1']
 
+def test_invalid_threshold(warehouse):
+    with pytest.raises(ValueError):
+        warehouse.low_stock(-1)
 
-def test_mock_supplier_side_effect():
-    mock_supplier = Mock()
-    mock_supplier.reorder.side_effect = ConnectionError("Supplier timeout")
+def test_duplicate(warehouse, item_factory):
+    with pytest.raises(ValueError, match='duplicate'):
+        warehouse.add(item_factory('A1'))
 
-    with pytest.raises(ConnectionError, match="Supplier timeout"):
-        mock_supplier.reorder("P-001", 10)
+def test_repository_interaction(item):
+    repo = Mock()
+    warehouse = Warehouse(repo)
+    warehouse.add(item)
+    repo.save.assert_called_once_with(item)
 
+def test_supplier_return_value(warehouse):
+    supplier = Mock()
+    supplier.reorder.return_value = 'REQ-1'
+    assert warehouse.request_reorder('A1', supplier) == 'REQ-1'
+    supplier.reorder.assert_called_once_with('A1', 10)
 
-@pytest.mark.asyncio
-async def test_async_reorder_service():
-    mock_client = AsyncMock()
-    mock_client.place_order.return_value = {"status": "success"}
+def test_supplier_side_effect(warehouse):
+    supplier = Mock()
+    supplier.reorder.side_effect = ConnectionError('offline')
+    with pytest.raises(ConnectionError, match='offline'):
+        warehouse.request_reorder('A1', supplier)
 
-    service = AsyncReorderService(async_client=mock_client)
-    result = await service.check_and_reorder_async("P-001", 10, 3)
-
-    assert result == "success"
-    mock_client.place_order.assert_awaited_once_with("P-001", 7)
-
-
-@pytest.mark.asyncio
-async def test_async_reorder_service_sufficient():
-    mock_client = AsyncMock()
-    service = AsyncReorderService(async_client=mock_client)
-    result = await service.check_and_reorder_async("P-001", 5, 10)
-
-    assert result == "sufficient"
-    mock_client.place_order.assert_not_awaited()
+def test_async_reorder(warehouse):
+    provider = Mock()
+    provider.reorder = AsyncMock(return_value='ASYNC-1')
+    assert asyncio.run(warehouse.async_reorder('A1', provider)) == 'ASYNC-1'
+    provider.reorder.assert_awaited_once_with('A1', 10)
