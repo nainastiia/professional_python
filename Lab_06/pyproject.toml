@@ -3,11 +3,12 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "warehouse"
+name = "warehouse-lab6"
 version = "1.0.0"
 description = "Warehouse stock management and pytest testing"
 requires-python = ">=3.10"
 dependencies = []
+
 
 [project.optional-dependencies]
 test = [
@@ -15,9 +16,6 @@ test = [
     "pytest-cov>=5.0",
     "pytest-asyncio>=0.23",
 ]
-
-[tool.setuptools]
-package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -33,7 +31,8 @@ markers = [
 
 [tool.coverage.run]
 branch = true
-source = ["warehouse"]
+source = ["src/warehouse"]
+relative_files = true
 
 [tool.coverage.report]
 show_missing = true
