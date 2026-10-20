@@ -1,6 +1,7 @@
 from .models import WarehouseItem, InsufficientStockError
 
 class Warehouse:
+    """Warehouse stock service, including low-stock detection and reordering."""
     def __init__(self, repository=None):
         self.items = {}
         self.repository = repository

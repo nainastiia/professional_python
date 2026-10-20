@@ -31,3 +31,16 @@ class WarehouseItem:
     @property
     def value(self) -> float:
         return self.quantity * self.unit_price
+
+
+@dataclass(frozen=True)
+class Product:
+    """Product master data; WarehouseItem holds quantity and unit_price stock data."""
+    code: str
+    name: str
+
+    def __post_init__(self):
+        if not isinstance(self.code, str) or not self.code.strip():
+            raise ValueError("code is required")
+        if not isinstance(self.name, str) or not self.name.strip():
+            raise ValueError("name is required")
