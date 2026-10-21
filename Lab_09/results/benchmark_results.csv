@@ -1,0 +1,11 @@
+Dataset Size,Method,Workers,Mean Time (s),Speedup
+10000,Baseline (Python),1,0.000717,1.00x
+10000,NumPy Vectorized,1,0.001391,0.52x
+10000,ProcessPoolExecutor,2,0.670897,0.00x
+10000,ProcessPoolExecutor,4,0.826206,0.00x
+100000,Baseline (Python),1,0.008803,1.00x
+100000,NumPy Vectorized,1,0.018055,0.49x
+100000,ProcessPoolExecutor,2,2.854281,0.00x
+100000,ProcessPoolExecutor,4,2.244409,0.00x
+500000,Baseline (Python),1,0.040028,1.00x
+500000,NumPy Vectorized,1,0.078902,0.51x
