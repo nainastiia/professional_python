@@ -1,0 +1,12 @@
+input:
+  path: data/inventory.csv
+  format: csv
+output:
+  path: output/inventory.json
+  format: json
+processing:
+  low_stock_threshold: 5
+  skip_invalid: true
+logging:
+  level: INFO
+  path: logs/application.log
